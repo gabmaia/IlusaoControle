@@ -1,0 +1,1 @@
+h1= a ilusão de controlada (estimativa da empresa) é influenciada pela (taxa de sucesso nGanhos/nTentativas(ambos por empresa))
