@@ -13,15 +13,30 @@ dados %>%
   pivot_longer(-id, names_to=c(".value", "empresa"), names_pattern="([^_]+)_(.*)") %>% 
   filter(!is.na(empresa)) %>% mutate(taxa_escolhas=escolhas/12, taxa_escolhas=replace_na(taxa_escolhas, 0))->escolhas
 
+
+escolhas %>% 
+  cbind(taxa_escolhas_norm=qnorm((rank(escolhas$taxa_escolhas,na.last="keep") ‐ 0.5)/sum(!is.na(escolhas$taxa_escolhas)))) %>% 
+  
+  cbind(avaliação_norm=qnorm((rank(escolhas$avaliação,na.last="keep") ‐ 0.5)/sum(!is.na(escolhas$avaliação))))  ->escolhas
+
+
 dados %>%  
   filter(id!="P48") %>% 
   pivot_longer(-id, names_to=c(".value", "empresa"), names_pattern="([^_]+)_(.*)") %>% 
   filter(!is.na(empresa)) %>% mutate(taxa_sucesso=ganhos/escolhas, taxa_sucesso=replace_na(taxa_sucesso, 0),
                                      avaliação=replace_na(avaliação, 0))->sucesso
 
+sucesso %>% 
+  cbind(taxa_sucesso_norm=qnorm((rank(sucesso$taxa_sucesso,na.last="keep") ‐ 0.5)/sum(!is.na(sucesso$taxa_sucesso)))) ->sucesso
+
+cor.test(escolhas$taxa_escolhas_norm,escolhas$avaliação_norm, method = "pearson")
+
+
 
 cor.test(escolhas$taxa_escolhas,escolhas$avaliação, method = "pearson")->a
 
+escolhas %>% 
+  cbind(taxa_escolhas_norm=qnorm((rank(escolhas$taxa_escolhas,na.last="keep") ‐ 0.5)/sum(!is.na(escolhas$taxa_escolhas))))  ->bob
 
 dados %>% 
   filter(id!="P48") %>% 
